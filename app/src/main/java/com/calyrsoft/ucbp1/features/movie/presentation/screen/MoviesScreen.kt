@@ -1,8 +1,6 @@
 package com.calyrsoft.ucbp1.features.movies.presentation.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,8 +31,8 @@ fun MoviesScreen(
     Scaffold(
         topBar = {
             TopAppBarWithBack(
-                title = "Películas Populares", // String, no composable
-                navController = navController // Pasa el navController
+                title = "Películas Populares",
+                navController = navController
             )
         }
     ) { innerPadding ->
@@ -50,7 +48,10 @@ fun MoviesScreen(
                 is MoviesViewModel.MoviesUiState.Success -> {
                     LazyColumn(modifier = Modifier.padding(8.dp)) {
                         items(state.movies) { movie ->
-                            MovieCard(movie = movie)
+                            MovieCard(
+                                movie = movie,
+                                onLikeClick = { id -> viewModel.toggleLike(id) }
+                            )
                         }
                     }
                 }

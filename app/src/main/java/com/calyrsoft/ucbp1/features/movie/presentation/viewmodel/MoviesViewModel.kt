@@ -34,6 +34,17 @@ class MoviesViewModel(
             )
         }
     }
+    fun toggleLike(movieId: Int) {
+        val currentState = _uiState.value
+        if (currentState is MoviesUiState.Success) {
+            val updatedMovies = currentState.movies.map { movie ->
+                if (movie.id == movieId) {
+                    movie.copy(isLiked = !movie.isLiked)
+                } else movie
+            }
+            _uiState.value = MoviesUiState.Success(updatedMovies)
+        }
+    }
 
     sealed interface MoviesUiState {
         data object Loading : MoviesUiState
