@@ -28,7 +28,7 @@ class ProfileValueObjectsTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun `ProfileEmail lanza excepción si no contiene arroba`() {
-        ProfileEmail("correo_invalido")
+        ProfileEmail("correo_incorrecto")
     }
 
     @Test
