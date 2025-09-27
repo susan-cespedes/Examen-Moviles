@@ -9,14 +9,15 @@ import com.calyrsoft.ucbp1.features.movies.data.database.entity.MovieEntity
 
 @Database(
     entities = [MovieEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class MoviesRoomDatabase : RoomDatabase() {
     abstract fun movieDao(): IMovieDao
 
     companion object {
-        @Volatile private var INSTANCE: MoviesRoomDatabase? = null
+        @Volatile
+        private var INSTANCE: MoviesRoomDatabase? = null
 
         fun getDatabase(context: Context): MoviesRoomDatabase =
             INSTANCE ?: synchronized(this) {

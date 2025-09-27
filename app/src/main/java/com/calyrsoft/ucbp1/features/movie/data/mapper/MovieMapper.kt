@@ -11,7 +11,8 @@ fun MovieEntity.toDomain(): Movie {
         backdropPath = backdropPath,
         releaseDate = releaseDate,
         voteAverage = voteAverage ?: 0.0,
-        voteCount = voteCount ?: 0
+        voteCount = voteCount ?: 0,
+        isLiked = isLiked
     )
 }
 
@@ -24,6 +25,7 @@ fun Movie.toEntity(): MovieEntity {
         backdropPath = backdropPath,
         releaseDate = releaseDate,         // String → String (ok)
         voteAverage = voteAverage,         // Double → Double? (ok)
-        voteCount = voteCount              // Int → Int? (ok)
+        voteCount = voteCount,
+        isLiked = isLiked
     )
 }

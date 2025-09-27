@@ -7,7 +7,6 @@ import com.calyrsoft.ucbp1.features.movies.data.datasource.remote.MovieRemoteDat
 import com.calyrsoft.ucbp1.features.movies.data.mapper.toEntity
 import com.calyrsoft.ucbp1.features.movies.domain.model.Movie
 import com.calyrsoft.ucbp1.features.movies.domain.repository.MovieRepository
-
 class MovieRepositoryImpl(
     private val remote: MovieRemoteDataSource,
     private val local: MovieLocalDataSource
@@ -15,27 +14,44 @@ class MovieRepositoryImpl(
 
     override suspend fun getPopularMovies(): Result<List<Movie>> {
         val remoteResult = remote.getPopularMovies().map { dtos ->
-            dtos.map { it.toDomain() }
+            // Traer lo que ya existe en la base local
+            val localMovies = local.getAll()
+
+            dtos.map { dto ->
+                // Si ya estaba guardado en local, conserva su "isLiked"
+                val existing = localMovies.find { it.id == dto.id }
+                dto.toDomain().copy(isLiked = existing?.isLiked ?: false)
+            }
         }
 
         if (remoteResult.isSuccess) {
-            // guardar/actualizar en Room
+            // Guardar en Room con los likes conservados
             local.upsertAll(remoteResult.getOrNull().orEmpty())
-            return remoteResult
+            // Devolver desde la base local (ya ordenado por isLiked)
+            return runCatching { local.getAll() }
         }
 
-        // fallback a cache local si hay error de red
+        // fallback a cache local si falla la red
         return runCatching { local.getAll() }
     }
-}
 
-private fun MovieDto.toDomain() = Movie(
-    id = id,
-    title = title,
-    overview = overview,
-    posterPath = posterPath,
-    backdropPath = backdropPath,
-    releaseDate = releaseDate,
-    voteAverage = voteAverage,
-    voteCount = voteCount
-)
+
+
+    override suspend fun toggleLike(movieId: Int) {
+        local.toggleLike(movieId)
+    }
+    private fun MovieDto.toDomain(): Movie {
+        return Movie(
+            id = id,
+            title = title,
+            overview = overview,
+            posterPath = posterPath,
+            backdropPath = backdropPath,
+            releaseDate = releaseDate,
+            voteAverage = voteAverage,
+            voteCount = voteCount,
+            isLiked = false
+        )
+    }
+
+}

@@ -18,4 +18,7 @@ class MovieLocalDataSource(
     suspend fun clear() {
         dao.clearAll()
     }
+    suspend fun toggleLike(movieId: Int) {
+        dao.toggleLike(movieId)
+    }
 }

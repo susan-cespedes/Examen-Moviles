@@ -85,6 +85,6 @@ val appModule = module {
     // --- ViewModels ---
     viewModel { ProfileViewModel(get()) }
     viewModel { DollarViewModel(get(), get()) }
-    viewModel { MoviesViewModel(get()) }
+    viewModel { MoviesViewModel(get(),get()) }
     viewModel { DollarHistoryViewModel(get()) }
 }

@@ -11,9 +11,15 @@ interface IMovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(list: List<MovieEntity>)
 
-    @Query("SELECT * FROM movies ORDER BY voteAverage DESC")
+
+    @Query("SELECT * FROM movies ORDER BY isLiked DESC, voteAverage DESC")
     suspend fun getAll(): List<MovieEntity>
 
     @Query("DELETE FROM movies")
     suspend fun clearAll()
+
+    @Query("UPDATE movies SET isLiked = NOT isLiked WHERE id = :movieId")
+    suspend fun toggleLike(movieId: Int)
 }
+
+

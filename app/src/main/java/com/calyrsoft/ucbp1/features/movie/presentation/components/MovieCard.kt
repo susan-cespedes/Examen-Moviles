@@ -21,7 +21,7 @@ import com.calyrsoft.ucbp1.features.movies.domain.model.Movie
 @Composable
 fun MovieCard(
     movie: Movie,
-    onLikeClick: (Int) -> Unit // 👈 callback
+    onLikeClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
